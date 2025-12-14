@@ -1,0 +1,102 @@
+#pragma once
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Patient {
+public:
+    string name;
+    int age;
+    string disease;
+    string doctor;
+    Patient* next;
+
+    Patient(string n, int a, string d, string doc) {
+        name = n;
+        age = a;
+        disease = d;
+        doctor = doc;
+        next = NULL;
+    }
+};
+
+class PatientList {
+public:
+    Patient* head;
+
+    PatientList() {
+        head = NULL;
+    }
+
+    // Add patient
+    void addPatient(string name, int age, string disease, string doctor) {
+        Patient* newNode = new Patient(name, age, disease, doctor);
+        newNode->next = head;
+        head = newNode;
+        cout << "\nPatient Registered Successfully!\n";
+    }
+
+    // Search patient
+    void searchPatient(string name) {
+        Patient* temp = head;
+        while (temp != NULL) {
+            if (temp->name == name) {
+                cout << "\nPatient Found:\n";
+                cout << "Name: " << temp->name << endl;
+                cout << "Age: " << temp->age << endl;
+                cout << "Disease: " << temp->disease << endl;
+                cout << "Doctor: " << temp->doctor << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Patient Not Found.\n";
+    }
+
+    // Delete / discharge patient
+    void deletePatient(string name) {
+        if (head == NULL) {
+            cout << "No patients in the list.\n";
+            return;
+        }
+
+        if (head->name == name) {
+            Patient* temp = head;
+            head = head->next;
+            delete temp;
+            cout << "Patient Discharged Successfully!\n";
+            return;
+        }
+
+        Patient* current = head;
+        while (current->next != NULL && current->next->name != name) {
+            current = current->next;
+        }
+
+        if (current->next == NULL) {
+            cout << "Patient Not Found.\n";
+            return;
+        }
+
+        Patient* del = current->next;
+        current->next = current->next->next;
+        delete del;
+        cout << "Patient Discharged Successfully!\n";
+    }
+
+    // Display all patients
+    void displayPatients() {
+        if (head == NULL) {
+            cout << "No Patients Registered.\n";
+            return;
+        }
+        Patient* temp = head;
+        cout << "\n---- Patient List ----\n";
+        while (temp != NULL) {
+            cout << "Name: " << temp->name << ", Age: " << temp->age
+                 << ", Disease: " << temp->disease
+                 << ", Doctor: " << temp->doctor << endl;
+            temp = temp->next;
+        }
+    }
+};
