@@ -1,0 +1,49 @@
+pragma once
+#include <iostream>
+#include <stack>
+using namespace std;
+
+class BillingSystem {
+public:
+    stack<int> undoStack;
+    stack<int> redoStack;
+
+    void addBill(int amount) {
+        undoStack.push(amount);
+        while (!redoStack.empty()) redoStack.pop();
+        cout << "Added Billing Entry: " << amount << endl;
+    }
+
+    void undo() {
+        if (undoStack.empty()) {
+            cout << "Nothing to Undo.\n";
+            return;
+        }
+        int last = undoStack.top();
+        undoStack.pop();
+        redoStack.push(last);
+        cout << "Undo Done. Removed: " << last << endl;
+    }
+
+    void redo() {
+        if (redoStack.empty()) {
+            cout << "Nothing to Redo.\n";
+            return;
+        }
+        int last = redoStack.top();
+        redoStack.pop();
+        undoStack.push(last);
+        cout << "Redo Done. Restored: " << last << endl;
+    }
+
+    void showCurrentBill() {
+        if (undoStack.empty()) {
+            cout << "Bill is empty.\n";
+            return;
+        }
+        stack<int> temp = undoStack;
+        cout << "\n--- Current Billing Entries ---\n";
+        while (!temp.empty()) {
+            cout << temp.top() << endl;
+            temp.pop();
+        }
